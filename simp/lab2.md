@@ -1,5 +1,6 @@
-# 50.054 Project Lab 2
+# 50.054 Project Lab 2 (10%)
 
+## Deadline - 26 Nov 2023 23:59
 
 In the previous lab, we completed the parser and ir code generation.
 
