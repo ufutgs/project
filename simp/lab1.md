@@ -194,7 +194,7 @@ case class AVar(name:String)
 The original Maximal Munch Algorithm is implemented in `src/main/scala/sutd/compiler/simp/ir/MaximalMunch.scala`. 
 
 It is implemented using
-* a state mona - which enables us to generate new variable names without clashing, generate new label for the instruction.
+* a state monad - which enables us to generate new variable names without clashing, generate new label for the instruction.
 
 The state monad `StateCogenMonad` combines a state monad transformer `StateT` and `Identity` monads. 
 You don't need to worry about the details of monad transformer in order to use it. As the interface functions are exactly the same to those in a normal state monad. The basic util functions of `StateCogenMonad` include
