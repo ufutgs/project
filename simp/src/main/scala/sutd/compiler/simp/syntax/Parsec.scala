@@ -288,10 +288,10 @@ object Parsec {
     }
 
     // optional
-    def optional[T, A](pa: Parser[T, A]): Parser[T, Either[A, Unit]] = {
-        val p1: Parser[T, Either[A, Unit]] = for (a <- pa) yield (Left(a))
-        lazy val p2: Parser[T, Either[A, Unit]] =
-            Parser(env => Empty(Ok((Right(()), env))))
+    def optional[T, A](pa: Parser[T, A]): Parser[T, Either[Unit, A]] = {
+        val p1: Parser[T, Either[Unit, A]] = for (a <- pa) yield Right(a)
+        lazy val p2: Parser[T, Either[Unit, A]] =
+            Parser(env => Empty(Ok((Left(()), env))))
         choice(attempt(p1))(p2)
     }
 

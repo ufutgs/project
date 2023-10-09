@@ -146,9 +146,9 @@ object BacktrackParsec {
     }
 
     // optional
-    def optional[T, A](pa: Parser[T, A]): Parser[T, Either[A, Unit]] = {
-        val p1: Parser[T, Either[A, Unit]] = for (a <- pa) yield (Left(a))
-        val p2: Parser[T, Either[A, Unit]] = Parser(toks => Ok((Right(()), toks)))
+    def optional[T, A](pa: Parser[T, A]): Parser[T, Either[Unit, A]] = {
+        val p1: Parser[T, Either[Unit, A]] = for (a <- pa) yield (Right(a))
+        val p2: Parser[T, Either[Unit, A]] = Parser(toks => Ok((Left(()), toks)))
         choice(p1)(p2)
     }
 
