@@ -89,12 +89,12 @@ object BacktrackParsec {
             }
         })
 
-    def sat[T](p: T => Boolean): Parser[T, T] = Parser(toks =>
+    def sat[T](p: T => Boolean, err:String = "" ): Parser[T, T] = Parser(toks =>
         toks match {
-            case Nil => Failed("sat() is called with an empty token stream.")
+            case Nil => Failed(s"sat() is called with an empty token stream. ${err}")
             case (c :: cs) if p(c) => Ok((c, cs))
             case (c :: cs) =>
-                Failed("sat() is called with a unsatisfied predicate.")
+                Failed(s"sat() is called with a unsatisfied predicate. ${err}")
         }
     )
 
@@ -146,9 +146,9 @@ object BacktrackParsec {
     }
 
     // optional
-    def optional[T, A](pa: Parser[T, A]): Parser[T, Either[A, Unit]] = {
-        val p1: Parser[T, Either[A, Unit]] = for (a <- pa) yield (Left(a))
-        val p2: Parser[T, Either[A, Unit]] = Parser(toks => Ok((Right(()), toks)))
+    def optional[T, A](pa: Parser[T, A]): Parser[T, Either[Unit, A]] = {
+        val p1: Parser[T, Either[Unit, A]] = for (a <- pa) yield (Right(a))
+        val p2: Parser[T, Either[Unit, A]] = Parser(toks => Ok((Left(()), toks)))
         choice(p1)(p2)
     }
 

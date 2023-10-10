@@ -177,7 +177,7 @@ object Parsec {
             }
         })
 
-    def sat[E, T](p: T => Boolean)(using pe: ParserEnv[E, T]): Parser[E, T] = Parser(
+    def sat[E, T](p: T => Boolean, err:String="")(using pe: ParserEnv[E, T]): Parser[E, T] = Parser(
       (env: E) => {
           val toks = pe.getTokens(env)
           val ln = pe.getLine(env)
@@ -186,7 +186,7 @@ object Parsec {
               case Nil =>
                   Empty(
                     Failed(
-                      s"sat() is called with an empty token stream at line ${ln}, col ${col}"
+                      s"sat() is called with an empty token stream at line ${ln}, col ${col}. ${err}"
                     )
                   )
               case (c :: cs) if p(c) && c == '\n' =>
@@ -196,7 +196,7 @@ object Parsec {
               case (c :: cs) =>
                   Empty(
                     Failed(
-                      s"sat() is called with a unsatisfied predicate at line ${ln}, col ${col}"
+                      s"sat() is called with a unsatisfied predicate at line ${ln}, col ${col}. ${err}"
                     )
                   )
 
@@ -288,10 +288,10 @@ object Parsec {
     }
 
     // optional
-    def optional[T, A](pa: Parser[T, A]): Parser[T, Either[A, Unit]] = {
-        val p1: Parser[T, Either[A, Unit]] = for (a <- pa) yield (Left(a))
-        lazy val p2: Parser[T, Either[A, Unit]] =
-            Parser(env => Empty(Ok((Right(()), env))))
+    def optional[T, A](pa: Parser[T, A]): Parser[T, Either[Unit, A]] = {
+        val p1: Parser[T, Either[Unit, A]] = for (a <- pa) yield Right(a)
+        lazy val p2: Parser[T, Either[Unit, A]] =
+            Parser(env => Empty(Ok((Left(()), env))))
         choice(attempt(p1))(p2)
     }
 
