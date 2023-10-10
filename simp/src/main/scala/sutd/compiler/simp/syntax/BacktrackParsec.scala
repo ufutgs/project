@@ -89,12 +89,12 @@ object BacktrackParsec {
             }
         })
 
-    def sat[T](p: T => Boolean): Parser[T, T] = Parser(toks =>
+    def sat[T](p: T => Boolean, err:String = "" ): Parser[T, T] = Parser(toks =>
         toks match {
-            case Nil => Failed("sat() is called with an empty token stream.")
+            case Nil => Failed(s"sat() is called with an empty token stream. ${err}")
             case (c :: cs) if p(c) => Ok((c, cs))
             case (c :: cs) =>
-                Failed("sat() is called with a unsatisfied predicate.")
+                Failed(s"sat() is called with a unsatisfied predicate. ${err}")
         }
     )
 
