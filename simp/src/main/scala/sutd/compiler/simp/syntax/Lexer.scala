@@ -50,7 +50,7 @@ object Lexer {
         case FSlashSign(src:SrcLoc)
 
         case LThanSign(src:SrcLoc)
-        case GThanSign(src:SrcLoc)
+        // case GThanSign(src:SrcLoc)
         
         case LBrace(src:SrcLoc)
         case RBrace(src:SrcLoc)
@@ -82,7 +82,7 @@ object Lexer {
         case FSlashSign(src) => src
 
         case LThanSign(src) => src
-        case GThanSign(src) => src
+        // case GThanSign(src) => src
         
         case LBrace(src) => src
         case RBrace(src) => src
@@ -151,11 +151,13 @@ object Lexer {
         cl <- get(lenv => pe.getCol(lenv))
     } yield (LThanSign(SrcLoc(ln,cl)))
 
+    /*
     def  l_GThanSign(using pe:ParserEnv[LEnv, Char]):Parser[LEnv, LToken] = for {
         c <- sat((c:Char) => c == '>')
         ln <- get(lenv => pe.getLine(lenv))
         cl <- get(lenv => pe.getCol(lenv))
     } yield (GThanSign(SrcLoc(ln,cl)))
+    */
 
     def l_LBrace(using pe:ParserEnv[LEnv, Char]):Parser[LEnv, LToken] = for {
         c <- sat((c:Char) => c == '{')
@@ -276,7 +278,7 @@ object Lexer {
             l_AsterixSign,
             l_FSlashSign,
             l_LThanSign,
-            l_GThanSign,
+//            l_GThanSign,
             l_LBrace,
             l_RBrace,
             l_LParen,
