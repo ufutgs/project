@@ -25,7 +25,7 @@ object BacktrackParsec {
                 )
         }
         def flatMap[B](f: A => Parser[T, B]): Parser[T, B] = this match {
-            case Parser(ea) =>
+            case Parser(p) =>
                 Parser(toks =>
                     p(toks) match {
                         case Failed(err) => Failed(err)
