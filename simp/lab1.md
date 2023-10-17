@@ -31,7 +31,7 @@ There is no obvious dependency between the two tasks, hence you can divide the t
 
 #### Task 0
 
-Run `sbt build` and make sure there is no compilation error.
+Run `sbt compile` and make sure there is no compilation error.
 
 #### Task 1 - Complete the parser for SIMP programs
 
