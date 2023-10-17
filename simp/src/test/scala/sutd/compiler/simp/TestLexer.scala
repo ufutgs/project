@@ -61,7 +61,7 @@ while c < x {
     c = c + 1;
 }
 return s;
-        """
+        """.filter(_ != '\r')
         val expected = List(
             WhiteSpace(SrcLoc(2,1),'\n'), IdTok(SrcLoc(2,2),"x"), WhiteSpace(SrcLoc(2,3),' '), EqSign(SrcLoc(2,4)), WhiteSpace(SrcLoc(2,5),' '), IdTok(SrcLoc(2,10),"input"), SemiColon(SrcLoc(2,11)), 
             WhiteSpace(SrcLoc(3,1),'\n'), IdTok(SrcLoc(3,2),"s"), WhiteSpace(SrcLoc(3,3),' '), EqSign(SrcLoc(3,4)), WhiteSpace(SrcLoc(3,5),' '), IntTok(SrcLoc(3,6),0), SemiColon(SrcLoc(3,7)), 
