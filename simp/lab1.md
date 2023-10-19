@@ -156,6 +156,16 @@ You should
 1. define the needed parser and sub parsers that parse the input using the left-recursion-free grammar.
 1. convert the resulted expression AST in the left-recursion-free grammar back to the AST in the left-recursion grammar.
 
+Note that the grammar rule for expression is also ambiguous. e.g. `1 + 2 * 3` can be parsed as 
+
+1. `Plus(ConstExp(IntConst(1)), Mult(ConstExp(Intconst(2)), ConstExp(3)))` or 
+1. `Mult(Plus(ConstExp(IntConst(1)), ConstExp(Intconst(2))), ConstExp(3))` 
+
+by applying left- or right-associativity or changing the grammar to respect the operator precedence.
+
+For simplicity, we accept any diasmbiguation policies mentioned above. In the test cases, we will always use parenthesis to make the nesting explicit.
+
+
 ##### Testing the Parser
 
 Now you should be able to pass all test cases in `src/test/scala/sutd/compiler/simp/TestParser.scala`
