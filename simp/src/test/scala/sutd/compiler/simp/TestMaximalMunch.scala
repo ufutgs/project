@@ -9,7 +9,7 @@ import sutd.compiler.simp.ir.Util.{given, *}
 import sutd.compiler.simp.ir.MaximalMunch.*
 import sutd.compiler.simp.monad.StateT.{given, *}
 
-class TestMaximalMunchCogen extends funsuite.AnyFunSuite {
+class TestMaximalMunch extends funsuite.AnyFunSuite {
     import Stmt.*, Var.*, Exp.*, Const.*
     import Instr.*, Opr.*
     // y = 1
