@@ -2,7 +2,7 @@
 
 ## Deadline - 10 Dec 2023 23:59
 
-In the previous lab, we completed the big step operational semantics oand type inference for SIMP program.
+In the previous lab, we completed the big step operational semantics and type inference for SIMP program.
 
 If you have trouble completing lab 2, you can send the instructor an email to ask for the sample solution. 
 
