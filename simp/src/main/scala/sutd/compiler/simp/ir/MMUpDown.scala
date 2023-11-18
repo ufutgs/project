@@ -125,14 +125,14 @@ object MMUpDown {
         LBWhile is the next label (w/o incr) 
         GE(cond) |- (up_cond, down_cond)
 
-        LWhile is a fresh label
+        LWhileCondJ is a fresh label
         G(body) |- instrs2 
         LEndBody is a fresh label
         
         LEndWhile is the next label (w/o incr)
 
-        instrs1 = [LWhile: ifn up_cond goto LEndWhile] 
-        instrs2' = instrs2 ++ [ LEndBody: goto LWhile ]
+        instrs1 = [LWhileCondJ: ifn up_cond goto LEndWhile] 
+        instrs2' = instrs2 ++ [ LEndBody: goto LBWhile ]
         --------------------------------------------------------- (While)
         G(while cond {body}) |- down_cond ++ instrs1 ++ instrs2'
         */

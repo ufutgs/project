@@ -105,17 +105,17 @@ class TestParser extends funsuite.AnyFunSuite {
         }
     }
 
-    test("test p_exp: parsing x - (1 + y * 2)") {
+    test("test p_exp: parsing x - (1 + (y * 2))") {
         val input = List(
             IdTok(SrcLoc(1,1),"x"), WhiteSpace(SrcLoc(1,2), ' '), 
             MinusSign(SrcLoc(1,3)), WhiteSpace(SrcLoc(1,4), ' '), 
             LParen(SrcLoc(1,5)), IntTok(SrcLoc(1,6),1),  WhiteSpace(SrcLoc(1,7), ' '), 
             PlusSign(SrcLoc(1,8)),  WhiteSpace(SrcLoc(1,9), ' '), 
-            IdTok(SrcLoc(1,10),"y"),  WhiteSpace(SrcLoc(1,11), ' '),
-            AsterixSign(SrcLoc(1,12)),  WhiteSpace(SrcLoc(1,13), ' '), 
-            IntTok(SrcLoc(1,14),2), RParen(SrcLoc(1,15))
+            LParen(SrcLoc(1,10)), IdTok(SrcLoc(1,11),"y"),  WhiteSpace(SrcLoc(1,12), ' '),
+            AsterixSign(SrcLoc(1,13)),  WhiteSpace(SrcLoc(1,14), ' '), 
+            IntTok(SrcLoc(1,15),2), RParen(SrcLoc(1,16)), RParen(SrcLoc(1,17))
         )
-        val expected = Minus(VarExp(Var("x")),ParenExp(Plus(ConstExp(IntConst(1)),Mult(VarExp(Var("y")),ConstExp(IntConst(2))))))
+        val expected = Minus(VarExp(Var("x")),ParenExp(Plus(ConstExp(IntConst(1)),ParenExp(Mult(VarExp(Var("y")),ConstExp(IntConst(2)))))))
         Parsec.run(p_exp)(PEnv(input)) match {
             case Consumed(Ok((exp, penv))) if done(penv) => {
                 assert(exp == expected)

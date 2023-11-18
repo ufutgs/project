@@ -4,6 +4,8 @@
 
 In the previous lab, we completed the parser and ir code generation.
 
+If you have trouble completing lab 1, you can send the instructor an email to ask for the sample solution. 
+
 In this lab, we look into the dynamic and static semantics of the SIMP language.
 
 ## Tasks for this Lab

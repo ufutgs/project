@@ -31,7 +31,7 @@ There is no obvious dependency between the two tasks, hence you can divide the t
 
 #### Task 0
 
-Run `sbt build` and make sure there is no compilation error.
+Run `sbt compile` and make sure there is no compilation error.
 
 #### Task 1 - Complete the parser for SIMP programs
 
@@ -78,7 +78,7 @@ Where the `src:SrcLoc` refers to the line and column coordinate of the token in 
 `SrcLoc.scala` under the same folder.
 
 The top level function for the lexer is `lex:Parser[LEnv, List[LToken]]` which is a monadic parser that extract character sequence from the lexer environment `LEnv` and returns a list of lexer tokens. The entire lexer is implemented using monadic parser combinator. It has to make reference to the monad library `src/main/scala/sutd/compiler/simp/monad/Monad.scala` and
-the parser combinator library `src/main/scala/sutd/compiler/simp/monad/Parsec.scala`.
+the parser combinator library `src/main/scala/sutd/compiler/simp/syntax/Parsec.scala`.
 
 There is no need to modify these files.
 
@@ -155,6 +155,16 @@ You should
 1. apply the left-recursion elimination to generate a left-recursion-free equivalent grammar for the expression. 
 1. define the needed parser and sub parsers that parse the input using the left-recursion-free grammar.
 1. convert the resulted expression AST in the left-recursion-free grammar back to the AST in the left-recursion grammar.
+
+Note that the grammar rule for expression is also ambiguous. e.g. `1 + 2 * 3` can be parsed as 
+
+1. `Plus(ConstExp(IntConst(1)), Mult(ConstExp(Intconst(2)), ConstExp(3)))` or 
+1. `Mult(Plus(ConstExp(IntConst(1)), ConstExp(Intconst(2))), ConstExp(3))` 
+
+by applying left- or right-associativity or changing the grammar to respect the operator precedence.
+
+For simplicity, we accept any diasmbiguation policies mentioned above. In the test cases, we will always use parenthesis to make the nesting explicit.
+
 
 ##### Testing the Parser
 

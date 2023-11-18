@@ -9,7 +9,7 @@ import sutd.compiler.simp.ir.PseudoAssembly.*
 import sutd.compiler.simp.ir.Util.{given, *}
 import sutd.compiler.simp.ir.MMUpDown.*
 
-class TestMMUpDownCogen extends funsuite.AnyFunSuite {
+class TestMMUpDown extends funsuite.AnyFunSuite {
     import Stmt.*, Var.*, Exp.*, Const.*
     import Instr.*, Opr.*
 
