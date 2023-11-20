@@ -25,6 +25,7 @@ class TestSSA extends funsuite.AnyFunSuite {
             (10,IGoto(4)), 
             (11,IMove(Regstr("_r_ret"),Temp(AVar("x")))), 
             (12,IRet))
+
         val expected = List(
             (1,List(),IMove(Temp(AVar("x_1")),IntLit(0))), 
             (2,List(),IMove(Temp(AVar("y_1")),IntLit(10))), 
@@ -102,8 +103,8 @@ class TestSSA extends funsuite.AnyFunSuite {
             (6,List(
                 PhiAssignment(Temp(AVar("c_2")),List((5,AVar("c_1")), (12,AVar("c_3"))),Temp(AVar("c"))), 
                 PhiAssignment(Temp(AVar("f_2")),List((5,AVar("f_1")), (12,AVar("f_3"))),Temp(AVar("f"))), 
-                PhiAssignment(Temp(AVar("t_2")),List((5,AVar("t_1")), (12,AVar("t_3"))),Temp(AVar("t"))), 
-                PhiAssignment(Temp(AVar("s_2")),List((5,AVar("s_1")), (12,AVar("s_3"))),Temp(AVar("s")))
+                PhiAssignment(Temp(AVar("s_2")),List((5,AVar("s_1")), (12,AVar("s_3"))),Temp(AVar("s"))),
+                PhiAssignment(Temp(AVar("t_2")),List((5,AVar("t_1")), (12,AVar("t_3"))),Temp(AVar("t"))) 
                 ),ILThan(Temp(AVar("b_1")),Temp(AVar("c_2")),Temp(AVar("x_1")))), 
             (7,List(),IIfNot(Temp(AVar("b_1")),13)), 
             (8,List(),IMove(Temp(AVar("t_3")),Temp(AVar("f_2")))), 
@@ -185,8 +186,8 @@ class TestSSA extends funsuite.AnyFunSuite {
             (2,List(),IMove(Temp(AVar("r_1")),IntLit(0))), 
             (3,List(),IMove(Temp(AVar("i_1")),IntLit(0))), 
             (4,List(
-                PhiAssignment(Temp(AVar("r_2")),List((3,AVar("r_1")), (19,AVar("r_3"))),Temp(AVar("r"))), 
-                PhiAssignment(Temp(AVar("i_2")),List((3,AVar("i_1")), (19,AVar("i_3"))),Temp(AVar("i")))
+                PhiAssignment(Temp(AVar("i_2")),List((3,AVar("i_1")), (19,AVar("i_3"))),Temp(AVar("i"))),
+                PhiAssignment(Temp(AVar("r_2")),List((3,AVar("r_1")), (19,AVar("r_3"))),Temp(AVar("r"))) 
                 ),ILThan(Temp(AVar("b_1")),Temp(AVar("i_2")),Temp(AVar("x_1")))), 
             (5,List(),IIfNot(Temp(AVar("b_1")),20)), 
             (6,List(),IMove(Temp(AVar("f_1")),IntLit(0))), 
@@ -196,9 +197,9 @@ class TestSSA extends funsuite.AnyFunSuite {
             (10,List(
                 PhiAssignment(Temp(AVar("b_2")),List((9,AVar("b_1")), (16,AVar("b_3"))),Temp(AVar("b"))), 
                 PhiAssignment(Temp(AVar("f_2")),List((9,AVar("f_1")), (16,AVar("f_3"))),Temp(AVar("f"))), 
-                PhiAssignment(Temp(AVar("t_2")),List((9,AVar("t_1")), (16,AVar("t_3"))),Temp(AVar("t"))), 
                 PhiAssignment(Temp(AVar("j_2")),List((9,AVar("j_1")), (16,AVar("j_3"))),Temp(AVar("j"))), 
-                PhiAssignment(Temp(AVar("s_2")),List((9,AVar("s_1")), (16,AVar("s_3"))),Temp(AVar("s")))
+                PhiAssignment(Temp(AVar("s_2")),List((9,AVar("s_1")), (16,AVar("s_3"))),Temp(AVar("s"))),
+                PhiAssignment(Temp(AVar("t_2")),List((9,AVar("t_1")), (16,AVar("t_3"))),Temp(AVar("t"))) 
                 ),ILThan(Temp(AVar("b_3")),Temp(AVar("j_2")),Temp(AVar("i_2")))), 
             (11,List(),IIfNot(Temp(AVar("b_3")),17)), 
             (12,List(),IMove(Temp(AVar("t_3")),Temp(AVar("f_2")))), 

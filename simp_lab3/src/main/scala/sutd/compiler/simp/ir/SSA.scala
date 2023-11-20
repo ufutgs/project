@@ -316,10 +316,15 @@ object SSA {
                     case Temp(AVar(name)) => for {
                             k2 <- incr(k1, name)
                             x_i <- ren(k2, x)
-                    } yield (k2, PhiAssignment(x_i, operands, stem)::phis1) 
+                    } yield (k2, phis1 ++ List(PhiAssignment(x_i, operands, stem))) 
                 }
             }
-        })(acc0)(phis)
+        })(acc0)(phis) match {
+            case Left(err) => Left(err)
+            case Right((k2,phis2)) => Right((k2, phis2.sortBy(phi => phi match {
+                case PhiAssignment(dest, operands, stem) => stem
+            })))
+        }
     }
 
     /**
@@ -365,8 +370,12 @@ object SSA {
                         } yield acc_operands ++ List((m, avar_p))
                         case (m, avar) => Right(acc_operands ++ List((m, avar)))
                     })(Nil)(operands)
-                } yield (acc_phis ++ List(PhiAssignment(x, operands_p, stem)))
-                
+                } yield { 
+                    val operands_p_sorted = operands_p.sortBy( operand => operand match {
+                        case (label, avar) => label
+                    })
+                    (acc_phis ++ List(PhiAssignment(x, operands_p_sorted, stem)))
+                }                
             })(Nil)(phis)
         } yield (label, phis_p, instr)
     }
@@ -461,5 +470,18 @@ object SSA {
             case Some(dest1) => Right(IIfNot(cond, dest1))
         }
         case _ => Right(i)
+    }
+
+
+    given oprOrdering(using so:Ordering[String]):Ordering[Opr] = new Ordering[Opr] {
+        def compare(x: Opr, y: Opr): Int = (x, y) match {
+            case (Temp(AVar(t1)), Temp(AVar(t2))) => so.compare(t1,t2)
+            case (Regstr(r1), Regstr(r2)) => so.compare(r1,r2)
+            case (IntLit(i1), IntLit(i2)) => i1 - i2
+            case (IntLit(_), _) => -1 
+            case (Regstr(_), IntLit(_)) => 1
+            case (Regstr(_), _) => -1
+            case (Temp(_), _) => 1
+        }
     }
 }
