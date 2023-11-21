@@ -11,7 +11,7 @@ object PseudoAssembly {
      * (Label)       l ::= 1 | 2 | ...
      * */
 
-    type LabeledInstr = (Label, Instr)
+    type    LabeledInstr = (Label, Instr)
     type Label = Int 
     enum Instr {
         case IMove(dest:Opr, src:Opr)

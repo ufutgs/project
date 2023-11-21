@@ -24,7 +24,7 @@ object Parser {
     import LToken.*
     import Progress.*
     import Result.*
-
+    import E_prime.*
     case class PEnv(toks: List[LToken])
 
     /**
@@ -177,9 +177,12 @@ object Parser {
       * @return
       */
 
-    def p_space:Parser[PEnv, LToken] = item // fixme
+    def p_space:Parser[PEnv, LToken] = sat(ltoken => ltoken match {
+        case WhiteSpace(_,_) => true
+        case _ => false
+    })
     
-    def p_spaces:Parser[PEnv, List[LToken]] = many(item) // fixme
+    def p_spaces:Parser[PEnv, List[LToken]] = many(p_space) 
 
     /** Lab 1 Task 1.1 end */
 
@@ -190,7 +193,112 @@ object Parser {
       *   E ::= E Op E | X | C | (E) contains left recursion
       * @return
       */
-    def p_exp:Parser[PEnv, Exp] = empty(ConstExp(IntConst(1))) // fixme
+          
+    enum E_prime{
+        case  Eps
+        case EpPlus(e2:Exp,ep2:E_prime)
+        case EpMinus(e2:Exp,ep2:E_prime)
+        case EpMult(e2:Exp,ep2:E_prime)
+        case EpDEqual(e2:Exp,ep2:E_prime)
+        case EpLThan(e2:Exp,ep2:E_prime) 
+    }
+    def p_exp:Parser[PEnv, Exp] = choice(p_varToExp)(choice(p_varToConst)(p_varToParen))
+    
+    def p_varToExp: Parser[PEnv, Exp] = for{
+        x <- p_var
+        _ <- p_spaces
+        p_e <- p_Eprime
+    } yield from_Eprime(VarExp(x))(p_e)
+
+    def p_varToConst: Parser[PEnv, Exp] = for{
+        c <- p_const
+        _ <- p_spaces
+        p_e <- p_Eprime
+    }yield from_Eprime(ConstExp(c))(p_e)
+
+    def p_varToParen: Parser[PEnv, Exp] = for {
+        lparen <- p_lparen
+        _ <- p_spaces
+        e <- p_exp
+        _ <- p_spaces
+        rparen <- p_rparen
+        _ <- p_spaces
+        p_e <- p_Eprime
+    } yield from_Eprime(ParenExp(e))(p_e)
+
+    def p_Eprime :Parser[PEnv, E_prime] = for{
+        omt <- optional(choice(p_plusEp)(choice(p_minusEp)(choice(p_multEp)(choice(p_equalEp)(p_lthanEp)))))
+    } yield{ omt match {
+        case Left(_) => E_prime.Eps
+        case Right(value) => value
+        }
+    }
+    
+
+    def from_Eprime (e:Exp) (ep: E_prime) : Exp = ep match {
+        case E_prime.Eps => e
+        case EpPlus(e1, ep2) => {
+            val e2 = Plus(e,e1)
+            from_Eprime(e2)(ep2)
+        }  
+         case EpMinus(e1, ep2) => {
+            val e2 = Minus(e,e1)
+            from_Eprime(e2)(ep2)
+        }  
+         case EpMult(e1, ep2) => {
+            val e2 = Mult(e,e1)
+            from_Eprime(e2)(ep2)
+        }  
+         case EpDEqual(e1, ep2) => {
+            val e2 = DEqual(e,e1)
+            from_Eprime(e2)(ep2)
+        }  
+         case EpLThan(e1, ep2) => {
+            val e2 = LThan(e,e1)
+            from_Eprime(e2)(ep2)
+        }  
+    }
+  
+    def p_plusEp : Parser[PEnv, E_prime] = for{
+        op <- p_plus
+        _ <- p_spaces
+        ep <- p_Eprime
+        _ <- p_spaces
+        e <- p_exp
+    } yield EpPlus(e,ep)
+
+    def p_minusEp : Parser[PEnv, E_prime] = for{
+        op <- p_minus
+        _ <- p_spaces
+        ep <- p_Eprime
+        _ <- p_spaces
+        e <- p_exp
+    } yield EpMinus(e,ep)
+
+    def p_multEp : Parser[PEnv, E_prime] = for{
+        op <- p_mult
+        _ <- p_spaces
+        ep <- p_Eprime
+        _ <- p_spaces
+        e <- p_exp
+    } yield EpMult(e,ep)
+
+    def p_equalEp : Parser[PEnv, E_prime] = for{
+        op <- p_equal
+        _ <- p_spaces
+        ep <- p_Eprime
+        _ <- p_spaces
+        e <- p_exp
+    } yield EpDEqual(e,ep)
+    
+    def p_lthanEp : Parser[PEnv, E_prime] = for{
+        op <- p_lthan
+        _ <- p_spaces
+        ep <- p_Eprime
+        _ <- p_spaces
+        e <- p_exp
+    } yield EpLThan(e,ep)
+
     /** Lab 1 Task 1.2 end */
     
     /**

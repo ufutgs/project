@@ -2,6 +2,7 @@ package sutd.compiler.simp.semantic
 
 import sutd.compiler.simp.syntax.AST.*
 import sutd.compiler.simp.monad.Monad.*
+import org.scalactic.Bool
 
 
 object TypeInf {
@@ -82,9 +83,17 @@ object TypeInf {
       */
     given exTypeSubstitutable:Substitutable[ExType] = new Substitutable[ExType]{
         def applySubst(tysubst:TypeSubst)(ty:ExType):ExType = tysubst match {
-            // Lab 2 Task 2.1
-            case _ => ty // fixme
-            // Lab 2 Task 2.1 end
+            case Empty => ty
+            case RevComp((s,extyp), psi) => {
+               var x = ty match{
+               case MonoType(t) => ty
+               case TypeVar(n) => if (n == s) extyp else ty
+            }
+                psi match{
+                    case Empty => x
+                    case _ => applySubst(psi)(x)
+                }
+            }
         }
     }
 
@@ -126,22 +135,35 @@ object TypeInf {
     }
 
     given infStmt:Infer[Stmt] = new Infer[Stmt] {
-        def infer(s:Stmt):TypeConstrs = s match {
-            case Nop => Set() 
-            case Assign(x, e) => {
-                val n = varname(x)
-                val alphax = TypeVar(n)
-                inferExp(e) match {
-                    case (exTy, k) => k + ((alphax, exTy))
+    def infer(s:Stmt):TypeConstrs = s match {
+        case Nop => Set() 
+        case Assign(x, e) => {
+            val n = varname(x)
+            val alphax = TypeVar(n)
+            inferExp(e) match {
+                case (exTy, k) => k + ((alphax, exTy))
+            }
+        }
+        case Ret(x) => Set()
+        // Lab 2 Task 2.3
+        case While(exp,stmts) => {
+        inferExp(exp) match{
+                case (exTy1,k1) => infList.infer(stmts) match{
+                case k: Set[(ExType,ExType)] => k.union(k1)+((exTy1,MonoType(BoolTy)))
+            }
+        }
+        }
+        case If(cond, th, el) => {
+        inferExp(cond) match{
+            case (exTy1,k1) => infList.infer(th) match{
+                case k2: Set[(ExType,ExType)]  => infList.infer(el) match{
+                        case k3: Set[(ExType,ExType)] => k1.union(k2.union(k3)) + ((exTy1,MonoType(BoolTy)))
+                    }
                 }
             }
-            case Ret(x) => Set()
-            // Lab 2 Task 2.3
-            case _ => Set() // fixme
-            // Lab 2 Task 2.3 end
-            
         }
     }
+}
 
     import Const.*
     /**
@@ -159,7 +181,21 @@ object TypeInf {
         }
         case ParenExp(e) => inferExp(e)
         // Lab 2 Task 2.3
-        case _ => (MonoType(IntTy), Set()) // fixme
+        case Plus(e1, e2) => (inferExp(e1),inferExp(e2)) match {
+            case ((exty1,k1),(exty2,k2)) => (MonoType(IntTy) , k1.union(k2).union(Set((exty1,MonoType(IntTy)),(exty2,MonoType(IntTy)) ))) 
+        }
+        case Minus(e1, e2) => (inferExp(e1),inferExp(e2)) match {
+            case ((exty1,k1),(exty2,k2)) => (MonoType(IntTy) , k1.union(k2).union(Set((exty1,MonoType(IntTy)),(exty2,MonoType(IntTy)) ))) 
+        }
+        case Mult(e1, e2) => (inferExp(e1),inferExp(e2)) match {
+            case ((exty1,k1),(exty2,k2)) => (MonoType(IntTy) , k1.union(k2).union(Set((exty1,MonoType(IntTy)),(exty2,MonoType(IntTy)) ))) 
+        }
+        case LThan(e1, e2) => (inferExp(e1),inferExp(e2)) match {
+            case ((exty1,k1),(exty2,k2)) => (MonoType(BoolTy) , k1.union(k2) + ((exty1,exty2)))
+        }
+        case DEqual(e1, e2) => (inferExp(e1),inferExp(e2)) match {
+            case ((exty1,k1),(exty2,k2)) => (MonoType(BoolTy) , k1.union(k2) + ((exty1,exty2)))
+        }
         // Lab 2 Task 2.3 end        
     } 
 
@@ -175,9 +211,11 @@ object TypeInf {
       */
     given extypesUnifiable:Unifiable[(ExType, ExType)] = new Unifiable[(ExType, ExType)] {
         def mgu(p:(ExType,ExType)):Either[String,TypeSubst] = p match {
-            // Lab 2 Task 2.2
-            case (exTy1, exTy2) => Left(s"error: unable to unify ${p.toString}") // fixme
-            // Lab 2 Task 2.2 end
+            case (MonoType(IntTy), MonoType(IntTy)) => Right(Empty)
+            case (MonoType(BoolTy), MonoType(BoolTy)) => Right(Empty)
+            case (TypeVar(n), t) => Right( single(n,t))
+            case (t,TypeVar(n)) =>  Right(single(n,t))
+            case (_,_) => Left("Error message")
         }
     }
 
@@ -193,9 +231,15 @@ object TypeInf {
     given listUnifiable[A](using u:Unifiable[A])(using s:Substitutable[List[A]]):Unifiable[List[A]] = new Unifiable[List[A]] {
         def mgu(l:List[A]):Either[String, TypeSubst] = {
             l match {
-                // Lab 2 Task 2.2
-                case _ => Left("TODO") // fixme
-                // Lab 2 Task 2.2 end
+                case Nil => Right(Empty)
+                case r::rest => r match{
+                    case (t1 : ExType,t2 : ExType) =>for {
+                        kappa1 <- extypesUnifiable.mgu((t1,t2))
+                         kPrime = s.applySubst(kappa1)(rest)
+                         kappa2 <- mgu(kPrime) 
+                    }yield compose(kappa2,kappa1)
+                    case (_,_) => Left("error Message")
+                }
             }
         }
     }

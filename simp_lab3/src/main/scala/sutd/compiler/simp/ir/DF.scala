@@ -2,6 +2,8 @@ package sutd.compiler.simp.ir
 
 import sutd.compiler.simp.ir.PseudoAssembly.*
 import sutd.compiler.simp.ir.CFG.*
+import scala.annotation.tailrec
+
 
 
 /**
@@ -166,7 +168,20 @@ object DF {
 
     // df local implementation from cytron's lemma 2
     // Task 1.1 TODO 
-    def dfLocal(x:Label, dt:DomTree, g:CFG):List[Label] = Nil // TODO: fixme
+    def dfLocal(x:Label, dt:DomTree, g:CFG):List[Label] = {
+        @tailrec
+        def dfLocalHelper(x:Label,dt:DomTree,l:List[Label],result:List[Label]):List[Label] =l match {
+                case Nil => result
+                case r::rest => isChildOf(r,x,dt) match {
+                    case false => dfLocalHelper(x,dt,rest,r::result)
+                    case true => dfLocalHelper(x,dt,rest,result)
+                }
+            }
+        CFG.successors(g,x) match{
+        case Nil => Nil
+        case vs => dfLocalHelper(x,dt,vs,Nil)
+    }
+}
 
     /**
       * Build dominance frontier table 
@@ -181,7 +196,16 @@ object DF {
         def go(acc:DFTable, x:Label):DFTable = {
             val df_local = dfLocal(x, dt, g)
             // Task 1.1 TODO 
-            def dfUp(u:Label):List[Label] = Nil // TODO: fixme
+            def dfUp(u:Label):List[Label] =  acc.get(u) match{
+                case None => Nil
+                case Some(vs) => vs.flatMap(k => dfUpHelper(k,x,dt))
+            }
+
+            def dfUpHelper(x:Label,u:Label,dt:DomTree): List[Label] = isChildOf(x,u,dt) match{
+                case false => List[Label](x)
+                case true => Nil
+            }
+            
             
             val df_up = childOf(x,dt).flatMap(u => dfUp(u))
             acc + (x -> (df_local ++ df_up))

@@ -1,0 +1,4 @@
+[0m[[0m[33mwarn[0m] [0m[0msbt-bloop_2.12_1.0-1.5.11-sources.jar no longer exists at /C:/Users/user/AppData/Local/Coursier/Cache/v1/https/repo1.maven.org/maven2/ch/epfl/scala/sbt-bloop_2.12_1.0/1.5.11/sbt-bloop_2.12_1.0-1.5.11-sources.jar[0m
+[0m[[0m[0mdebug[0m] [0m[0mnot up to date. inChanged = false, force = false[0m
+[0m[[0m[0mdebug[0m] [0m[0mUpdating ProjectRef(uri("file:/mnt/c/Users/user/Desktop/project/simp_lab3/project/project/"), "simp_lab3-build-build")...[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone updating ProjectRef(uri("file:/mnt/c/Users/user/Desktop/project/simp_lab3/project/project/"), "simp_lab3-build-build")[0m

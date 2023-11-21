@@ -33,6 +33,7 @@ object MMUpDown {
         case VarExp(v) => {
             val av = var2AVar(v) 
             me.pure((Temp(av), Nil))
+            
         }
         /*
          GE(e) |- (up_e, down_e)
@@ -49,7 +50,56 @@ object MMUpDown {
         --------------------------------------------------------------------- (Op)
          GE(e1 op e2) |- (X, down_e1 ++ down_e2 ++ [L:X <- up_e1 op up_e2])
          */ 
-        case _ =>  me.pure((IntLit(1), Nil)) // fixme
+        case Minus(e1, e2) => for {
+                (u1,d1) <- genExp(e1)
+                (u2,d2)  <- genExp(e2)
+                X <- newTemp
+                 lbl <- newLabel
+            } yield{
+                var op = IMinus(X,u1,u2)
+                (X, d1 ++ d2 ++ List((lbl,op)))
+            } 
+        // d <- e1+e2
+        case Plus(e1, e2) => for {
+                (u1,d1) <- genExp(e1)
+                (u2,d2)  <- genExp(e2)
+                X <- newTemp
+                 lbl <- newLabel
+        } yield{
+                var op = IPlus(X,u1,u2)
+                (X, d1 ++ d2 ++ List((lbl,op)))
+            } 
+        // d <- e1*e2
+        case Mult(e1, e2) => for {
+                (u1,d1) <- genExp(e1)
+                (u2,d2)  <- genExp(e2)
+                X <- newTemp
+                 lbl <- newLabel
+        }  yield{
+                var op = IMult(X,u1,u2)
+                (X, d1 ++ d2 ++ List((lbl,op)))
+            } 
+        // d <- e1 == e2
+        case DEqual(e1, e2) => for {
+                (u1,d1) <- genExp(e1)
+                (u2,d2)  <- genExp(e2)
+                X <- newTemp
+                 lbl <- newLabel
+        } yield{
+                var op = IDEqual(X,u1,u2)
+                (X, d1 ++ d2 ++ List((lbl,op)))
+            } 
+        // d <- e1 < e2
+        case LThan(e1, e2) => for {
+                (u1,d1) <- genExp(e1)
+                (u2,d2)  <- genExp(e2)
+                X <- newTemp
+                 lbl <- newLabel
+        } yield{
+                var op = ILThan(X,u1,u2)
+                (X, d1 ++ d2 ++ List((lbl,op)))
+            } 
+ 
         // Lab 1 Task 2.1 end
     }
 
@@ -131,12 +181,21 @@ object MMUpDown {
         
         LEndWhile is the next label (w/o incr)
 
-        instrs1 = [LWhileCondJ: ifn up_cond goto LEndWhile] 
+        instrs1 = [LWhile: ifn up_cond goto LEndWhile] 
         instrs2' = instrs2 ++ [ LEndBody: goto LBWhile ]
         --------------------------------------------------------- (While)
         G(while cond {body}) |- down_cond ++ instrs1 ++ instrs2'
         */
-        case _ => StateT{ st => Identity((st, List())) }  // fixme
+        case While(cond, b)  => for{
+            lblBWhile   <- chkNextLabel
+            (uc,dc) <- genExp(cond)
+            lblWhile <- newLabel
+            instrs2 <- cogen(b)
+            lblEndBody <- newLabel
+            lblEndWhile <- chkNextLabel
+            instrs1b = List((lblWhile,IIfNot(uc,lblEndWhile)))
+            instrs2b = instrs2 ++ List((lblEndBody,IGoto(lblBWhile)))
+        }yield dc ++ instrs1b ++ instrs2b
         // Lab 1 Task 2.2 end
     }
 

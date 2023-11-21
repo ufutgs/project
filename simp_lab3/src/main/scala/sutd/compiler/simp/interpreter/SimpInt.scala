@@ -50,7 +50,13 @@ object SimpInt {
         c3 <- plusConst(c1,c2)
       } yield c3
       // Lab 2 Task 1.1
-      case _ => Left("TODO") // fixme
+      case ParenExp(e1) => for {
+        c1 <- evalExp(dlt,e1)
+      } yield c1
+      case VarExp(v1) => dlt.get(v1) match
+        case Some(value) => Right(value)
+        case None => Left("Error: unintitialized variable.")
+      
       // Lab 2 Task 1.1 end
     }
 
@@ -72,7 +78,13 @@ object SimpInt {
       def eval(dlt:Delta, ss:List[A]):Either[ErrMsg, Delta] = ss match {
         case Nil => Right(dlt) 
         // Lab 2 Task 1.2 
-        case _ => Left("TODO") // fixme
+        case s::rest => { s match
+          case stmt : Stmt => evalOne.eval(dlt,stmt) 
+          match{
+              case Left(errmsg) => Left(errmsg)
+              case Right(n_dlt) => eval(n_dlt,rest)
+            }
+        }
         // Lab 2 Task 1.2 end
       }
     }
@@ -93,7 +105,19 @@ object SimpInt {
         } yield dlt_2
         case Ret(x) => Right(dlt)
         // Lab 2 Task 1.2 
-        case _ => Left("TODO") // fixme
+        case While(cond, b) => for {
+          c <- evalExp(dlt,cond)
+          n_dlt <- c match{
+            case IntConst(_) => Left("int expression found in the if condition position.")
+            case BoolConst(v) if v =>{
+               evalMany.eval(dlt,b) match{
+                  case Right(dlt_p) => evalOne.eval(dlt_p,s)
+                  case Left(err) => Left(err)
+                }
+            }
+            case BoolConst(v) => Right(dlt)
+          }
+        } yield n_dlt
         // Lab 2 Task 1.2 end
       }
 
