@@ -191,13 +191,14 @@ object DF {
 
 
     /**
-      * compute the DF+ of vertex v
+      * compute the DF+ of a list of vertexes vs
       *
       * @param dft
-      * @param v
+      * @param vs
       * @return
       */
-    def dfPlus(dft:DFTable, v:Label):List[Label] = {
+    
+    def dfPlus(dft:DFTable, vs:List[Label]):List[Label] = {
         def go(curr:Set[Label]):Set[Label] = {
             val next = curr.flatMap( v => dft.get(v) match {
                 case None => Set()
@@ -205,10 +206,7 @@ object DF {
             })
             if (next == curr) { curr } else { go(next) } 
         }
-        dft.get(v) match {
-            case None => Nil
-            case Some(vs) => go(vs.toSet).toList
-        }       
+        go(vs.toSet).toList
     }
 
 }
