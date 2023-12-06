@@ -32,8 +32,7 @@ object LivenessAnalysis {
       * @return
       */
     // Task 2.1 
-    def join(succs:List[AbstractState]):AbstractState = Set() // TODO: fixme 
-        // no succs means AbstractState = Set(), last label
+    def join(succs:List[AbstractState]):AbstractState = succs.foldLeft(Set[String]())( (a:Set[String],b:Set[String]) => powerSetLattice.lub(a,b))
 
     
     type MonotoneFunction = AbstractEnv => Either[String, AbstractEnv]
@@ -77,7 +76,26 @@ object LivenessAnalysis {
                 */
               // Task 2.2 
               // TODO Fix me: Some of the cases are missing here. 
-
+              case(label, IPlus(Temp(AVar(t)), src1, src2)) => {
+                  val joined_succs_states = joinSuccStates(label,acc)
+                  Right(acc+(label -> (joined_succs_states - t union vars(src1).toSet union vars(src2).toSet)))
+              }
+              case(label, IMinus(Temp(AVar(t)), src1, src2)) => {
+                  val joined_succs_states = joinSuccStates(label,acc)
+                  Right(acc+(label -> (joined_succs_states - t union vars(src1).toSet union vars(src2).toSet)))
+              }
+              case(label, IMult(Temp(AVar(t)), src1, src2))=> {
+                  val joined_succs_states = joinSuccStates(label,acc)
+                  Right(acc+(label -> (joined_succs_states - t union vars(src1).toSet union vars(src2).toSet)))
+              }
+              case(label, IDEqual(Temp(AVar(t)), src1, src2))=> {
+                  val joined_succs_states = joinSuccStates(label,acc)
+                  Right(acc+(label -> (joined_succs_states - t union vars(src1).toSet union vars(src2).toSet)))
+              }
+              case(label, ILThan(Temp(AVar(t)), src1, src2))  => {
+                  val joined_succs_states = joinSuccStates(label,acc)
+                  Right(acc+(label -> (joined_succs_states - t union vars(src1).toSet union vars(src2).toSet)))
+              }
 
               
               /**

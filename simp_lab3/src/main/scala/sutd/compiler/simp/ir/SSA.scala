@@ -55,10 +55,14 @@ object SSA {
         // Task 1.2 TODO
         val e:E = labels_modded_vars
         .foldLeft(Map():E)( (e:E, li:(Label,List[String]) )=> li match{
-            case (l,list) => dfPlus(dft,l).foldLeft(e)( (k:E,la:Label) => k.get(la) match{
+            case (l:Label,list) => dft.get(l) match{
+                case None => e
+                case Some(v) => dfPlus(dft,v).foldLeft(e)( (k:E,la:Label) => k.get(la) match{
                 case None => k +(la-> list)
                 case Some(value) => k + ( la-> (value++list).distinct)
             }) 
+            }
+            
         }
         )
         println(e)

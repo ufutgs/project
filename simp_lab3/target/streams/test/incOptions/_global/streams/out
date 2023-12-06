@@ -1,2 +1,32 @@
 [0m[[0m[0mdebug[0m] [0m[0mCreated transactional ClassFileManager with tempDir = /mnt/c/Users/user/Desktop/project/simp_lab3/target/scala-3.3.0/test-classes.bak[0m
+[0m[[0m[0mdebug[0m] [0m[0mAbout to delete class files:[0m
+[0m[[0m[0mdebug[0m] [0m[0mWe backup class files:[0m
+[0m[[0m[0mdebug[0m] [0m[0mCreated transactional ClassFileManager with tempDir = /mnt/c/Users/user/Desktop/project/simp_lab3/target/scala-3.3.0/test-classes.bak[0m
+[0m[[0m[0mdebug[0m] [0m[0mAbout to delete class files:[0m
+[0m[[0m[0mdebug[0m] [0m[0mWe backup class files:[0m
+[0m[[0m[0mdebug[0m] [0m[0mRegistering generated classes:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestSSA.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestMaximalMunch.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestTypeInf.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestPAInt.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestSignAnalysis.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestSimpInt.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestLivenessAnalysis.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestParser.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestDF.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestCFG.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestLexer.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestMMUpDown.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestSSA.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestMaximalMunch.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestTypeInf.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestPAInt.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestSignAnalysis.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestSimpInt.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestLivenessAnalysis.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestParser.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestDF.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestCFG.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestLexer.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	TestMMUpDown.tasty[0m
 [0m[[0m[0mdebug[0m] [0m[0mRemoving the temporary directory used for backing up class files: /mnt/c/Users/user/Desktop/project/simp_lab3/target/scala-3.3.0/test-classes.bak[0m

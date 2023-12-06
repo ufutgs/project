@@ -1,13 +1,22 @@
-[0m[[0m[31merror[0m] [0m[0m[31m[31m-- [E007] Type Mismatch Error: /mnt/c/Users/user/Desktop/project/simp_lab3/src/main/scala/sutd/compiler/simp/ir/DF.scala:200:21 [0m[0m[0m
-[0m[[0m[31merror[0m] [0m[0m[31m200 |[0m                [33mcase[0m None => Nil[0m
-[0m[[0m[31merror[0m] [0m[0m[31m[31m    |[0m                     ^^^^[0m[0m
-[0m[[0m[31merror[0m] [0m[0m[31m    |[0m            Found:    None.type[0m
-[0m[[0m[31merror[0m] [0m[0m[31m    |[0m            Required: List[sutd.compiler.simp.ir.PseudoAssembly.Label][0m
-[0m[[0m[31merror[0m] [0m[0m[31m    |[0m            pattern type is incompatible with expected type[0m
-[0m[[0m[31merror[0m] [0m[0m[31m    |[0m[0m
-[0m[[0m[31merror[0m] [0m[0m[31m    |[0m longer explanation available when compiling with `-explain`[0m
-[0m[[0m[31merror[0m] [0m[0m[31m[31m-- [E008] Not Found Error: /mnt/c/Users/user/Desktop/project/simp_lab3/src/main/scala/sutd/compiler/simp/ir/DF.scala:201:36 [0m[0m[0m
-[0m[[0m[31merror[0m] [0m[0m[31m201 |[0m                [33mcase[0m Some(vs) => vs.flatMap(k => dfUpHelper(k,x,dt))[0m
-[0m[[0m[31merror[0m] [0m[0m[31m[31m    |[0m                                 ^^^^^^^^^^[0m[0m
-[0m[[0m[31merror[0m] [0m[0m[31m    |[0m                                 value flatMap is not a member of Any[0m
-[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m[33m-- [E165] Type Warning: /mnt/c/Users/user/Desktop/project/simp_lab3/src/main/scala/sutd/compiler/simp/interpreter/SimpInt.scala:82:22 [0m[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m82 |[0m          [33mcase[0m stmt : Stmt => evalOne.eval(dlt,stmt) [0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m[33m   |[0m                      ^^^^[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m   |[0m                   pattern selector should be an instance of Matchable,,[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m   |[0m                   but it has unmatchable type A instead[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m   |[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m   |[0m longer explanation available when compiling with `-explain`[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m[33m-- [E165] Type Warning: /mnt/c/Users/user/Desktop/project/simp_lab3/src/main/scala/sutd/compiler/simp/semantic/TypeInf.scala:236:25 [0m[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m236 |[0m                    [33mcase[0m (t1 : ExType,t2 : ExType) =>[33mfor[0m {[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m[33m    |[0m                         ^^^^^^^^^^^^^^^^^^^^^^^^^[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m                 pattern selector should be an instance of Matchable,,[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m                 but it has unmatchable type A instead[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m longer explanation available when compiling with `-explain`[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m[33m-- [E165] Type Warning: /mnt/c/Users/user/Desktop/project/simp_lab3/src/main/scala/sutd/compiler/simp/semantic/TypeInf.scala:241:25 [0m[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m241 |[0m                    [33mcase[0m (_,_) => Left([31m"error Message"[0m)[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m[33m    |[0m                         ^^^^^[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m                 pattern selector should be an instance of Matchable,,[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m                 but it has unmatchable type A instead[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m longer explanation available when compiling with `-explain`[0m
+[0m[[0m[33mwarn[0m] [0m[0mthree warnings found[0m

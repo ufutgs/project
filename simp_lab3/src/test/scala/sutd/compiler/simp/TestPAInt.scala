@@ -5,7 +5,7 @@ import org.scalatest.funsuite
 import org.scalatest.matchers
 import sutd.compiler.simp.ir.PseudoAssembly.*
 import sutd.compiler.simp.interpreter.PAInt.*
-
+import sutd.compiler.simp.util.PrettyPrinter.*
 
 class TestPAInt extends funsuite.AnyFunSuite {
     import Instr.* 
@@ -49,6 +49,7 @@ class TestPAInt extends funsuite.AnyFunSuite {
             }
             case Right(res) => assert(res == expected) 
         }
+        prettyPrint(pa)
     }
 
 
@@ -101,6 +102,7 @@ class TestPAInt extends funsuite.AnyFunSuite {
             }
             case Right(res) => assert(res == expected) 
         }
+        prettyPrint(pa)
     }
 
 
@@ -169,5 +171,6 @@ class TestPAInt extends funsuite.AnyFunSuite {
             }
             case Right(res) => assert(res == expected) 
         }
+        prettyPrint(pa)
     }
 }

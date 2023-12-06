@@ -264,7 +264,18 @@ object JVM {
             * 
             */
         // YOUR CODE HERE
-
+            case ((l, IMinus(Temp(AVar(t)), src1, src2))::lis) => menv.get(t) match  {
+                        case None => m.raiseError(s"convertInstr failed: temp variable ${t} is not mapped to any jvm local variable.")
+                        case Some(jvar) => for {
+                            _  <- convertLabel(lenv, l)
+                            _  <- convertOpr(menv, src1)
+                            _  <- convertOpr(menv, src2)
+                            mv <- getMV
+                            _  <- m.pure(mv.visitInsn(Opcodes.ISUB))
+                            _  <- m.pure(mv.visitVarInsn(Opcodes.ISTORE, jvar))
+                            _  <- convertInstr(menv, lenv, lis)
+                        } yield ()
+                    }
         // TODO Task 3 
         // TODO this case is missing 
         /**
@@ -274,6 +285,18 @@ object JVM {
             *         M, L |- l : t <- s1 *s2; lis => jis0 + jis1 + jis2 + [imul, istore M(t)] + jis3
             * 
             */
+             case ((l, IMult(Temp(AVar(t)), src1, src2))::lis) => menv.get(t) match  {
+                        case None => m.raiseError(s"convertInstr failed: temp variable ${t} is not mapped to any jvm local variable.")
+                        case Some(jvar) => for {
+                            _  <- convertLabel(lenv, l)
+                            _  <- convertOpr(menv, src1)
+                            _  <- convertOpr(menv, src2)
+                            mv <- getMV
+                            _  <- m.pure(mv.visitInsn(Opcodes.IMUL))
+                            _  <- m.pure(mv.visitVarInsn(Opcodes.ISTORE, jvar))
+                            _  <- convertInstr(menv, lenv, lis)
+                        } yield ()
+                    }
         // YOUR CODE HERE
         
         /**
@@ -305,7 +328,17 @@ object JVM {
             * 
             */
         // YOUR CODE HERE
-
+         case ((l1, ILThan(Temp(AVar(t)), src1, src2))::(l2, IIfNot(Temp(AVar(t2)), l3))::lis) if t == t2 => lenv.get(l3) match {
+            case None => m.raiseError(s"")
+            case Some(jl3) => for {
+                _  <- convertLabel(lenv, l1)
+                _  <- convertOpr(menv, src1)
+                _  <- convertOpr(menv, src2)
+                mv <- getMV
+                _  <- m.pure(mv.visitJumpInsn(Opcodes.IF_ICMPGE, jl3))
+                _  <- convertInstr(menv, lenv, lis)
+            } yield ()
+        } 
         /**
             * 
             *          L |- i1 => jis0     M, L |- lis => jis1

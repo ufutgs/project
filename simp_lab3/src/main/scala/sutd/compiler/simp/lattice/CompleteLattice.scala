@@ -37,7 +37,7 @@ object CompleteLattice {
 
 
     given powerSetLattice[A]:CompleteLattice[Set[A]] = new CompleteLattice[Set[A]] {
-        def sqSubSetEq(a:Set[A], b:Set[A]):Option[Boolean] =
+        def sqSubSetEq(a:Set[A], b:Set[A]):Option[Boolean] = 
             if (a.subsetOf(b)) {
                 Some(true)
             } else {
